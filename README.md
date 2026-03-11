@@ -1,6 +1,6 @@
 # 🎬 CineTrade — Cinematic Strategy Replay Engine
 
-> Visualize moving-average crossover trading strategies on historical stock data with a beautiful, animated, cinematic chart experience.
+> Browse stock sectors · analyze any ticker · get an explicit **BUY / HOLD / SELL** verdict powered by a 6-signal scoring engine — all wrapped in a cinematic animated chart experience.
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?style=flat-square&logo=streamlit)
@@ -11,66 +11,63 @@
 
 ## ✨ Features
 
-- **📊 Full Interactive Chart** — Price, short & long moving averages, buy/sell signals, and volume — all in one dark cinematic chart
-- **🎬 Animated Replay Mode** — Watch the strategy unfold frame-by-frame with play/pause controls and a scrubber slider
-- **📈 Equity Curve** — Strategy P&L vs. Buy & Hold benchmark comparison
-- **📋 Trade Log** — Every buy/sell entry with price and % P&L
-- **⚡ Live KPIs** — Latest close, strategy return, win rate, and signal counts
-- **🎛 Fully Configurable** — Ticker, lookback period, MA windows, and animation speed all adjustable from the sidebar
+### 🏢 Sector & Stock Browser
+- **8 sectors** — Technology, Healthcare, Financials, Consumer, Energy, Communication, Industrials, Real Estate
+- **10 curated stocks per sector** — pick from the sidebar dropdown
+- **Custom ticker input** — type any Yahoo Finance symbol (stocks, ETFs, crypto like `BTC-USD`)
+- **Browse panel** — expandable chip grid showing all 80 pre-loaded tickers at a glance
+
+### 🟢🟡🔴 Explicit BUY / HOLD / SELL Verdict
+A **6-signal scoring engine** produces a clear recommendation:
+
+| Signal | Bullish (+1) | Bearish (−1) |
+|--------|-------------|--------------|
+| MA Trend | Short MA > Long MA | Short MA < Long MA |
+| Price vs Short MA | Price above short MA | Price below short MA |
+| Price vs Long MA | Price above long MA | Price below long MA |
+| RSI (14) | RSI < 35 (oversold) | RSI > 65 (overbought) |
+| MACD | MACD above signal line | MACD below signal line |
+| 5-Day Momentum | +2% or more | −2% or more |
+
+**Verdict rules:**
+- 🟢 **BUY** — Score ≥ +2
+- 🟡 **HOLD** — Score between −1 and +1
+- 🔴 **SELL** — Score ≤ −2
+
+### 📊 Technical Chart (3-panel)
+- Price with MA overlays and buy/sell signal markers
+- RSI (14) with overbought/oversold bands
+- MACD with histogram and signal line
+
+### 🎬 Animated Replay Mode
+- Frame-by-frame playback with Play / Pause controls and a scrubber slider
+
+### 📈 Backtest & Analytics
+- Equity curve vs. Buy & Hold benchmark
+- Full trade log with entry/exit prices and P&L %
+- KPI cards: close price, strategy return, win rate, RSI, signal counts
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
-
 ```bash
-git clone https://github.com/aj1m153/cinetrade.git
+git clone https://github.com/YOUR_USERNAME/cinetrade.git
 cd cinetrade
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 3. Run the app
-
-```bash
 streamlit run app.py
 ```
-
-The app will open automatically at `http://localhost:8501`
 
 ---
 
 ## ☁️ Deploy on Streamlit Community Cloud (Free)
 
-1. **Push your code to GitHub**
+1. Push to a **public** GitHub repo
+2. Go to **[share.streamlit.io](https://share.streamlit.io)** → Sign in with GitHub
+3. Click **New app** → set repo, branch `main`, file `app.py`
+4. Click **Deploy!**
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/cinetrade.git
-git push -u origin main
-```
-
-2. **Go to [share.streamlit.io](https://share.streamlit.io)**
-   - Sign in with your GitHub account
-
-3. **Click "New app"**
-   - Repository: `YOUR_USERNAME/cinetrade`
-   - Branch: `main`
-   - Main file path: `app.py`
-
-4. **Click "Deploy!"**
-   - Streamlit will install dependencies from `requirements.txt` automatically
-   - Your app will be live at `https://YOUR_USERNAME-cinetrade-app-XXXX.streamlit.app`
-
-> **Tip:** Make sure your repo is **public**, or connect a private repo with a Streamlit Teams account.
+Streamlit auto-installs from `requirements.txt`. Your app is live in ~1 minute.
 
 ---
 
@@ -78,60 +75,34 @@ git push -u origin main
 
 ```
 cinetrade/
-├── app.py               # Main Streamlit application
-├── requirements.txt     # Python dependencies
-└── README.md            # This file
+├── app.py            # Main Streamlit application
+├── requirements.txt  # Python dependencies
+└── README.md         # This file
 ```
 
 ---
 
-## 🧠 Strategy Logic
-
-This app implements a classic **Moving Average Crossover** strategy:
-
-| Signal | Condition |
-|--------|-----------|
-| 🟢 **BUY**  | Short MA crosses **above** Long MA |
-| 🔴 **SELL** | Short MA crosses **below** Long MA |
-
-### Backtest Assumptions
-- Starting capital: **$10,000**
-- Long-only (no short selling)
-- No transaction costs or slippage
-- Fully invested on each buy signal
-
----
-
-## ⚙️ Configuration
-
-All parameters are controlled from the sidebar:
+## ⚙️ Sidebar Controls
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| Ticker | `AAPL` | Any valid Yahoo Finance ticker |
-| Period | `6mo` | Lookback: 1mo, 3mo, 6mo, 1y, 2y |
-| Short MA | `20` | Short-term moving average window (days) |
-| Long MA | `50` | Long-term moving average window (days) |
-| Animation Speed | `2` | Replay speed (1 = slow, 5 = fast) |
-
----
-
-## 🛠 Tech Stack
-
-- **[Streamlit](https://streamlit.io)** — Web app framework
-- **[yfinance](https://github.com/ranaroussi/yfinance)** — Historical stock data
-- **[Plotly](https://plotly.com/python/)** — Interactive & animated charts
-- **[Pandas](https://pandas.pydata.org)** — Data manipulation
-- **[NumPy](https://numpy.org)** — Numerical operations
+| Sector | 💻 Technology | Industry sector filter |
+| Stock | AAPL | 10 curated stocks per sector |
+| Custom Ticker | — | Any Yahoo Finance symbol |
+| Period | 6 months | 1mo · 3mo · 6mo · 1y · 2y |
+| Short MA | 20 days | Fast moving average |
+| Long MA | 50 days | Slow moving average |
+| Animation Speed | 2× | Replay speed (1–5) |
+| View Mode | Full Chart | Full Chart or Animated Replay |
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is for **educational and entertainment purposes only**. Past strategy performance does not guarantee future results. This is not financial advice.
+Educational and entertainment purposes only. BUY / HOLD / SELL signals are algorithmic and do **not** constitute financial advice.
 
 ---
 
 ## 📄 License
 
-MIT License — free to use, modify, and distribute.
+MIT License
