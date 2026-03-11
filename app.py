@@ -102,10 +102,23 @@ hr { border-color: var(--border) !important; }
 # ─────────────────────────────────────────
 @st.cache_data(show_spinner=False)
 def fetch_data(stock: str, period: str) -> pd.DataFrame:
-    data = yf.download(stock, period=period, interval="1d", progress=False)
+    data = yf.download(stock, period=period, interval="1d",
+                       progress=False, auto_adjust=True)
+
+    # yfinance ≥0.2.x returns MultiIndex columns when auto_adjust=True
+    # e.g. ("Close", "AAPL") — flatten to just the field name
     if isinstance(data.columns, pd.MultiIndex):
-        data.columns = data.columns.get_level_values(0)
-    return data.dropna()
+        data.columns = [col[0] for col in data.columns]
+
+    # Drop duplicate columns that can appear after flattening
+    data = data.loc[:, ~data.columns.duplicated()]
+
+    # Ensure the essential columns exist
+    required = {"Open", "High", "Low", "Close", "Volume"}
+    if not required.issubset(set(data.columns)):
+        return pd.DataFrame()   # caller checks for empty
+
+    return data.dropna(subset=["Close"])
 
 
 def compute_indicators(data: pd.DataFrame, short_w: int, long_w: int) -> pd.DataFrame:
