@@ -25,7 +25,7 @@
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cinetrade.git
+git clone https://github.com/aj1m153/cinetrade.git
 cd cinetrade
 ```
 
